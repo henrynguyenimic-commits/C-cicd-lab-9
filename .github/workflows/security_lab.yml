@@ -1,0 +1,35 @@
+name: Lab 2 - Security and Secrets (Push & PR)
+
+# Cấu hình kích hoạt cho cả Push và Pull Request
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  secure-build:
+    runs-on: ubuntu-latest
+    
+    # Thiết lập quyền hạn (tùy chọn nhưng nên có)
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt trình biên dịch
+        run: sudo apt-get update && sudo apt-get install -y gcc
+
+      - name: Biên dịch chương trình C
+        # Sử dụng cờ -DTEST_MAIN để kích hoạt hàm main trong security.c
+        run: gcc src/security.c -DTEST_MAIN -o security_app
+
+      - name: Chạy kiểm tra bảo mật (Dùng Secrets)
+        env:
+          # Móc Secret từ Repository vào biến môi trường của hệ thống chạy test
+          MY_SECRET_TOKEN: ${{ secrets.MY_APP_TOKEN }}
+        run: |
+          echo "Đang thực hiện kiểm tra xác thực..."
+          ./security_app
