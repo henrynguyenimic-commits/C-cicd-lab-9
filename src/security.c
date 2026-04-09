@@ -13,7 +13,7 @@ int verify_access(void) {
     }
 
     // Giả sử mã đúng là "HenryNguyen"
-    if (strcmp(api_key, "HenryNguyen2026") == 0) {
+    if (strcmp(api_key, "HenryNguyen") == 0) {
         printf("Xác thực thành công! Quyền truy cập được cấp.\n");
         return 1;
     } else {
